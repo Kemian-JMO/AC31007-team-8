@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  ...
+
 </html>
 <?php
 //Starts the session that's being used
@@ -24,9 +24,44 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script type="text/javascript" src="file.js"></script>
   <link rel="stylesheet" href="Creator.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1"
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="./script.js"></script>
 </head>
 <body>
+
+    <!-- nav bar -->
+    <div class="navbar navbar-site navbar-default" role="navigation">
+        <div class="navbar-main">
+            <div class="container">
+                <div class="row">
+                    <div class="navbar-header">
+                        <div class="logo-group clearfix">
+                            <img src="img_UoDLogo.jpg" alt="logo" style="max-width:70%;">
+                        </div>
+                    </div>
+                    <div class="navbar-collapse collapse navbar-responsive-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="http://oai-content.co.uk/dashboard.php">Dashboard</a></li>
+                            <li><a href="http://oai-content.co.uk/logout.php">
+                              Sign Out,
+                              <?php
+                                echo $_SESSION["username"] . " (" . $_SESSION["role"] . ")";
+                              ?>
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
           <form id="questionnaire">
               <h1 class="app-title">Questionnaire</h1>
               <div id="dynamicCheck">
