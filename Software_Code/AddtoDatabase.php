@@ -41,11 +41,12 @@ if ($_SESSION["loggedIn"] != "true") {
      ?>
      <?php
 
-   	 if (isset($_POST['submit_val'])) {
+   	 if (isset($_POST['submit'])) {
        if ($_POST['dynfields']) {
          foreach ( $_POST['dynfields'] as $key=>$value ) {
    	       //$values = mysql_real_escape_string($value);
-   	       //$query = mysql_query("INSERT INTO my_hobbies (hobbies) VALUES ('$values')", $connection ); 
+   	       //$query = mysql_query("INSERT INTO my_hobbies (hobbies) VALUES ('$values')", $connection );
+   	       var_dump($value);
          }
      	 }
        echo "<i><h2><strong>" . count($_POST['dynfields']) . "</strong> Hobbies Added</h2></i>";
