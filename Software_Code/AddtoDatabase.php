@@ -15,14 +15,15 @@ if ($_SESSION["loggedIn"] != "true") {
     <p>hi</p>
 
     <?php
-
+/*
     if (isset($_POST['submit']))
     {
       $test = $_POST['testing'];
       if ($_POST['formQuestion']) {
 
-      	foreach ( $_POST['formQuestion'] as $key=>$value ) {
+      	foreach ( $_POST['formQuestion'] as $key => $value ) {
 
+          var_dump($value);
           var_dump($_POST['formQuestion']);
 
       	//$values = mysql_real_escape_string($value);
@@ -31,15 +32,26 @@ if ($_SESSION["loggedIn"] != "true") {
       	}
 
       	}
-      var_dump($_POST['testing']);
     }
 
 
 
 
-
+*/
      ?>
+     <?php
 
+   	 if (isset($_POST['submit_val'])) {
+       if ($_POST['dynfields']) {
+         foreach ( $_POST['dynfields'] as $key=>$value ) {
+   	       //$values = mysql_real_escape_string($value);
+   	       //$query = mysql_query("INSERT INTO my_hobbies (hobbies) VALUES ('$values')", $connection ); 
+         }
+     	 }
+       echo "<i><h2><strong>" . count($_POST['dynfields']) . "</strong> Hobbies Added</h2></i>";
+   	   //mysql_close();
+     }
+    ?>
      <p>hih</p>
   </body>
 </html>
