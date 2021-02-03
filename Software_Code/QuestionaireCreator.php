@@ -69,7 +69,7 @@
             <h1 class="app-title">Questionnaire</h1>
             <div id="dynamicCheck">
               <div class="btn-group">
-                  <button type="button" class="btn btn-primary" onclick="createNewFormElement();">Form</button>
+                  <button id = 'newFormElement' type="button" class="btn btn-primary" >Form</button>
                   <button type="button" class="btn btn-primary" onclick="createNewTextElement();">Small Text</button>
                   <button type="button" class="btn btn-primary">Multiple Choice</button>
                   <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" id="dropdownMenuButton" >
@@ -99,11 +99,11 @@
             var counter = 0;
 
 	           $(function(){
-               $('#add_field').click(function(){
+               $('#newFormElement').click(function(){
                  counter += 1;
                  $('#newElementId').append(
                    '<strong>Hobby No. ' + counter + '</strong><br />'
-                   + '<input id="field_' + counter + '" name="dynfields[]' + '" type="text" /><br />' );
+                   + '<div id ="tempIDdiv" data-IDElement ="temp" class="card"><label class="title-question"><input type="Question" class="form-control" id="tempID" placeholder="Enter Question here"' + counter + '" name="formQuestion[]' + '"><div  contenteditable= "true"> </div></label><textarea class=answer-text rows= "5" cols = "80" placeholder = Hello im a form></textarea></div>' );
 	                });
                 });
 
@@ -116,7 +116,7 @@
                 // First create a DIV element.
                 var txtNewInputBox = document.createElement('div');
                 // Then add the content (a new input box) of the element.
-                txtNewInputBox.innerHTML = "<div id ='tempIDdiv' data-IDElement ='temp' class='card'><label class='title-question'><input type='Question' class='form-control' id='tempID' placeholder='Enter Question here' name='formQuestion'><div  contenteditable= 'true'> </div></label><textarea class=answer-text rows= '5' cols = '80' placeholder = Hello im a form></textarea></div>";
+                txtNewInputBox.innerHTML = "<div id ='tempIDdiv' data-IDElement ='temp' class='card'><label class='title-question'><input type='Question' class='form-control' id='tempID' placeholder='Enter Question here' name='formQuestion[]'";
                 // Finally put it where it is supposed to appear.
                 document.getElementById("newElementId").appendChild(txtNewInputBox);
                 // Now the ID Script needs to run
