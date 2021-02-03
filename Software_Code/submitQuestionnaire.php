@@ -110,7 +110,7 @@
             exit();
           }
 
-          $SQLInput = "CALL removeUserFromParticipants(\"{$questionnaireNum}\", \"{$_SESSION['username']}\")";
+          $SQLInput = "CALL removeUserFromParticipants(\"{$questionnaireNum}\", \"{$_SESSION['username']}\", \"0\")";
           $queryOutput = $conn->query($SQLInput);
         }
       ?>
