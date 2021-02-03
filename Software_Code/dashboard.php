@@ -24,6 +24,7 @@
 
 <body>
   <!-- nav bar -->
+  <?php echo "help is this working" ?>
   <div class="navbar navbar-site navbar-default" role="navigation">
       <div class="navbar-main">
           <div class="container">
