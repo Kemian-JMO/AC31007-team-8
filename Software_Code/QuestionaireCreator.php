@@ -75,6 +75,9 @@
                   <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" id="dropdownMenuButton" >
                     <span class="caret"></span>
                   </button>
+
+                  <button id="add_field" type="button" class="btn btn-primary">test</button>
+
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" onclick="createNewMC2Element(2);" href="#">2</a>
                     <a class="dropdown-item" onclick="createNewMC2Element(3);" href="#">3</a>
@@ -92,7 +95,19 @@
   </div>
 
             <script type="text/JavaScript">
-
+
+            var counter = 0;
+
+	           $(function(){
+               $('#add_field').click(function(){
+                 counter += 1;
+                 $('#newElementId').append(
+                   '<strong>Hobby No. ' + counter + '</strong><br />'
+                   + '<input id="field_' + counter + '" name="dynfields[]' + '" type="text" /><br />' );
+	                });
+                });
+
+
                 function setAttribute(newID) {
                   $('tempIDdiv').attr('data-IDElement',newID);
                 }
