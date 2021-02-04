@@ -24,7 +24,6 @@
 
 <body>
   <!-- nav bar -->
-  <?php echo "help is this working" ?>
   <div class="navbar navbar-site navbar-default" role="navigation">
       <div class="navbar-main">
           <div class="container">
@@ -77,18 +76,24 @@
       echo "<div class=\"container\"><div class=\"row\">";
       createBlock("http://oai-content.co.uk/getCR.php", "Assign Co-Researcher", "Get a new Co-Reseacher? Tell the system this here!");
       createBlock("http://oai-content.co.uk/giveCRPermissions.php", "Co-Researcher Permissions", "Manage your Co-Researchers permissions here!");
-      createBlock("#", "Create Questionnaire", "Create a questionnaire and allow other users to answer it!");
+      createBlock("http://oai-content.co.uk/removeCR.php", "Remove Co-Researcher", "Lose a co-researcher? Remove their permissions here");
       echo "</div><br><hr><br></div>";
     }
+
     //What the CR can do
     if($_SESSION["role"] == "CR" || $_SESSION["role"] == "PR" || $_SESSION["role"] == "Lab Manager"){
       echo "<div class=\"container\"><div class=\"row\">";
       createBlock("http://oai-content.co.uk/resultsCSV.php", "Download Results", "Download the results of the wonderful questionnaires you've created!");
       createBlock("http://oai-content.co.uk/selectGraph.php", "Graph Results", "See the results of the multiple choice or likert questions from your questionnaires as graphs");
-      createBlock("#", "Edit Questionnaire", "Make a mistake in a questionnaire? Click here to edit them!");
+      createBlock("#", "Create Questionnaire", "Create a questionnaire and allow other users to answer it!");
       echo "</div><br><hr><br></div>";
+      echo "<div class=\"container\"><div class=\"row\">";
+      createBlock("#", "Edit Questionnaire", "Make a mistake in a questionnaire? Click here to edit them!");
+      createBlock("http://oai-content.co.uk/deleteQuestionaire.php", "Delete Questionnaire", "Delete a questionnaire that you no longer need");
     }
-    echo "<div class=\"container\"><div class=\"row\">";
+    else{
+      echo "<div class=\"container\"><div class=\"row\">";
+    }
     //What everyone can do
     createBlock("http://oai-content.co.uk/selectQuestionnaire.php", "Answer Questionnaire", "Answer any of the questionnaires you have access to.");
     echo "</div><br><hr><br></div>";
