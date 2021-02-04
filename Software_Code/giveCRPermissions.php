@@ -100,6 +100,17 @@
     $conn -> close();
     //Delete Previous Permissions
 
+    //Get CRPRID
+    $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+    if ($conn -> connect_errno) {
+      echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+      exit();
+    }
+    $SQLInput = "CALL getCRPRID(\"{$usernameIn}\", \"{$_SESSION['username']}\")";
+    $queryOutput = $conn->query($SQLInput);
+    $CRPRID = $queryOutput -> fetch_object() -> Identifier;
+    $conn -> close();
+
     //Add the new Permissions
     $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
     if ($conn -> connect_errno) {
@@ -107,7 +118,7 @@
       exit();
     }
 
-    $SQLInput = "CALL newCRPerms(\"{$usernameIn}\", \"{$questionnaireNum}\", \"{$viewer}\", \"{$editor}\", \"{$deleter}\", \"{$footager}\")";
+    $SQLInput = "CALL newCRPerms(\"{$usernameIn}\", \"{$questionnaireNum}\", \"{$viewer}\", \"{$editor}\", \"{$deleter}\", \"{$footager}\", \"{$CRPRID}\")";
     $queryOutput = $conn->query($SQLInput);
     $conn -> close();
     //Add the new Permissions
