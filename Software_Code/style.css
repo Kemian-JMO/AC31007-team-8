@@ -11,30 +11,31 @@ abody {
 main{
 position: relative;
 
-}
-
-h1 {
-  color: white;
-  text-align: center;
-}
-
-p {
-  font-family: verdana;
-  font-size: 20px;
-}
-
-#loginCol {
+}
+
+h1 {
+  color: white;
+  text-align: center;
+}
+
+p {
+  font-family: verdana;
+  font-size: 20px;
+}
+
+/* login box */
+#loginCol {
+  font-family: "Baxter Sans Bold", Helvetica, Arial, sans-serif;
   border-style: solid;
-  border-color: #394867 !important;
+  border-color: #5956DB !important;
   border-radius: 5px;
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
   left: 50%;
   padding: 20px;
-  resize: both;
   overflow: auto;
-  background-color: #9ba4b4 !important;
+  background-color: #FFFFFF !important;
 }
 
 /* navigation bar */
@@ -110,9 +111,52 @@ p {
     padding: 10px 17px;
 }
 
+/* colums for the dashboard */
+.column {
+  font-family: "Baxter Sans Bold", Helvetica, Arial, sans-serif;
+  float: left;
+  width: 33.33%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* buttton-promary1 */
+.btn-primary1{
+    background: #fa1b1b none repeat scroll 0 0;
+    border: 1px solid #fa1b1b;
+    color: #fff;
+}
+
+.btn1 {
+  font-family: "Baxter Sans Bold", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  padding: 10px;
+}
+
+.btn-primary:hover, .btn-primary:focus{
+
+  background: #4365e2 none repeat scroll 0 0 !important;
+
+  border-color: #4365e2 !important;
+
+  color: #fff;
+
+}
 
 .title{
   font-family: "Baxter Sans Bold", Helvetica, Arial, sans-serif;
+}
+
+.likert li {
+    float: center;
+    list-style-type: none;
+    display: inline-block;
+    vertical-align: top;
 }
 
 /* buttton-promary */
@@ -223,7 +267,15 @@ p {
 
   color: #333;
 
-  padding: 20px 0 28px 0;
+  padding: 0px 0 28px 0;
 
   margin: 0;
+}
+
+.padTheTextbox {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+#testerlol {
 }
