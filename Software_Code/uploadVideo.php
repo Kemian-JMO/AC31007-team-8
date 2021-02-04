@@ -47,8 +47,6 @@
               </div>
           </div>
       </div>
-
-
       <div class="clearfix"></div>
 </div>
 
@@ -56,9 +54,10 @@
 <?php
 if(isset($_POST['upload'])){
    $maxsize = 5242880; // 5MB
+   $_SESSION['message'] = "nothing happened ~O~";
    if(isset($_FILES['file']['name']) && $_FILES['file']['name'] != ''){
        $name = $_FILES['file']['name'];
-       $target_dir = "/videos/";
+       $target_dir = "videos/";
        $target_file = $target_dir . $_FILES["file"]["name"];
 
        // Select file type
@@ -83,7 +82,7 @@ if(isset($_POST['upload'])){
                  exit();
                }
                // Insert record
-               $query = "INSERT INTO videos(name,location) VALUES('".$name."','".$target_file."')";
+               $query = "INSERT INTO videos(name,location, Owner) VALUES('".$name."','".$target_file."','".$_SESSION['username']."')";
                $queryOutput = $conn->query($query);
                $conn -> close();
                $_SESSION['message'] = "Upload successfully.";
@@ -107,10 +106,20 @@ if(isset($_SESSION['message'])){
    unset($_SESSION['message']);
 }
 ?>
-<form method="post" action="" enctype='multipart/form-data'>
-  <input type='file' name='file' />
-  <input type='submit' value='Upload' name='upload'>
-</form>
+<div class="container">
+  <div id="loginCol">
+    <h1> UoD Upload Video </h1><br>
+    <form method="post" action="" enctype='multipart/form-data'>
+      <div class="form-group">
+        <input type='file' name='file' />
+      </div>
+      <br>
+      <div class="form-group">
+        <button id="submitBtn" type="submit" value='Upload' class="btn btn-primary" name ="upload">Upload Video</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 
 
