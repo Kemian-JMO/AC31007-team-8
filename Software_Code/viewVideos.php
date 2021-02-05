@@ -46,7 +46,6 @@
     }
 
     //video sync functions
-    var synched = false;
     var currentTimes = [];
     var timeDifference = [];
 
@@ -54,18 +53,16 @@
 
       synched = !synched;
 
-      if(synched){
-
-        //get current times
-        for (i = 0; i < videos.length; i++){
-          push.currentTimes(videos[i].currentTime);
-        }
-
-        //take the first video time and store the other two's difference
-        for (i = 1; i < videos.length; i++){
-          push.timeDifference(currentTimes[i] - currentTimes[0]);
-        }
+      //get current times
+      for (i = 0; i < videos.length; i++){
+        push.currentTimes(videos[i].currentTime);
       }
+
+      //take the first video time and store the other two's difference
+      for (i = 1; i < videos.length; i++){
+        push.timeDifference(currentTimes[i] - currentTimes[0]);
+      }
+
     }
 
     function syncVideos(){
@@ -113,31 +110,58 @@
 <div class = "row">
 <!-- Select what videos you wnat to see -->
   <?php
-    $counter = 0;
-    foreach ($_POST as $key => $value) {
-      if($key != "submitBtn"){
-        //Connect to database
-        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-        if ($conn -> connect_errno) {
-          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-          exit();
+    if(isset($_POST['submitBtn']))
+    {
+      $counter = 0;
+      $videosLocations = array();
+      $videosID = array();
+      foreach ($_POST as $key => $value) {
+        if($key != "submitBtn"){
+          $videoID = $value;
+          //Connect to database
+          $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+          if ($conn -> connect_errno) {
+            echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+            exit();
+          }
+
+          //Insert the data into the database
+          $SQLInput = "CALL getVideoFromID(\"{$value}\")";
+          $queryOutput = $conn->query($SQLInput);
+          $conn -> close();
+
+          $row = $queryOutput ->fetch_object();
+
+          $videoID = $row->name;
+
+          echo "<div class=\"column\" align=\"center\"><div style='float: center; margin-right: 5px; margin-left: 5px;'>
+             <video id=\"{$counter}{$row -> name}\" src='/{$row -> location}' controls width='800px' height='450px' ></video>
+             <br>
+             <span>{$row -> name}</span>
+          </div></div>";
+          echo "<script type=\"text/javascript\">"," addToVideosArray(\"{$counter}{$row -> name}\");","</script>";
+
+          array_push($videosLocations, $row -> location);
+          array_push($videosID, $row->name);
+          $counter = $counter + 1;
         }
-
-        //Insert the data into the database
-        $SQLInput = "CALL getVideoFromID(\"{$value}\")";
-        $queryOutput = $conn->query($SQLInput);
-        $conn -> close();
-
-        $row = $queryOutput ->fetch_object();
-
-        echo "<div class=\"column\" align=\"center\"><div style='float: center; margin-right: 5px; margin-left: 5px;'>
-           <video id=\"{$counter}{$row -> name}\" src='/{$row -> location}' controls width='800px' height='450px' ></video>
-           <br>
-           <span>{$row -> name}</span>
-        </div></div>";
-        echo "<script type=\"text/javascript\">"," addToVideosArray(\"{$counter}{$row -> name}\");","</script>";
       }
-      $counter = $counter + 1;
+      $_SESSION['videoLocations'] = $videosLocations;
+      $_SESSION['videoNames'] = $videosID;
+    }
+    else{
+      $locationsArray = $_SESSION['videoLocations'];
+      $IDArray = $_SESSION['videoNames'];
+      $arrayLength = count($locationsArray);
+      for($i=0;$i<$arrayLength;$i++){
+        echo "<div class=\"column\" align=\"center\"><div style='float: center; margin-right: 5px; margin-left: 5px;'>
+           <video id=\"{$i}{$IDArray[$i]}\" src='/{$locationsArray[$i]}' controls width='800px' height='450px' ></video>
+           <br>
+           <span>{$IDArray[$i]}</span>
+        </div></div>";
+        echo "<script type=\"text/javascript\">"," addToVideosArray(\"{$i}{$IDArray[$i]}\");","</script>";
+        $videoID = $IDArray[$i];
+      }
     }
   ?>
 </div>
@@ -148,7 +172,6 @@
   {
     //Take inputs
     $TSText = $_POST["textIn"];
-    $videoID = $value;
     $tags = $_POST["tagsIn"];
     $supers = $_POST["superIn"];
 
@@ -182,38 +205,40 @@
     //Creating tags
     $individual = explode(" ", $tags);
     foreach($individual as $oneTag){
-      //Connect to server
-      $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-      if ($conn -> connect_errno) {
-        echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-        exit();
+      if(strlen($oneTag) > 3){
+        //Connect to server
+        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+        if ($conn -> connect_errno) {
+          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+          exit();
+        }
+        //Create call statement and run it
+        $SQLInput = "CALL addTag(\"{$oneTag}\", \"0\")";
+        $queryOutput = $conn->query($SQLInput);
+        $conn -> close();
+        //Connect to server
+        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+        if ($conn -> connect_errno) {
+          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+          exit();
+        }
+        //Create call statement and run it
+        $SQLInput = "CALL getTagID(\"{$oneTag}\", \"0\")";
+        $queryOutput = $conn->query($SQLInput);
+        $conn -> close();
+        $tagID = $queryOutput -> fetch_object() -> Identifier;
+        //Connect to server
+        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+        if ($conn -> connect_errno) {
+          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+          exit();
+        }
+        //Create call statement and run it
+        $SQLInput = "CALL linkTSandTag(\"{$TimestampID}\", \"{$tagID}\")";
+        $queryOutput = $conn->query($SQLInput);
+        $conn -> close();
+        $tagID = $queryOutput -> fetch_object() -> Identifier;
       }
-      //Create call statement and run it
-      $SQLInput = "CALL addTag(\"{$oneTag}\", \"0\")";
-      $queryOutput = $conn->query($SQLInput);
-      $conn -> close();
-      //Connect to server
-      $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-      if ($conn -> connect_errno) {
-        echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-        exit();
-      }
-      //Create call statement and run it
-      $SQLInput = "CALL getTagID(\"{$oneTag}\", \"0\")";
-      $queryOutput = $conn->query($SQLInput);
-      $conn -> close();
-      $tagID = $queryOutput -> fetch_object() -> Identifier;
-      //Connect to server
-      $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-      if ($conn -> connect_errno) {
-        echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-        exit();
-      }
-      //Create call statement and run it
-      $SQLInput = "CALL linkTSandTag(\"{$TimestampID}\", \"{$tagID}\")";
-      $queryOutput = $conn->query($SQLInput);
-      $conn -> close();
-      $tagID = $queryOutput -> fetch_object() -> Identifier;
     }
     //!Creating tags
 
@@ -221,38 +246,40 @@
     //Creating tags
     $individual = explode(" ", $supers);
     foreach($individual as $oneTag){
-      //Connect to server
-      $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-      if ($conn -> connect_errno) {
-        echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-        exit();
+      if(strlen($oneTag) > 3){
+        //Connect to server
+        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+        if ($conn -> connect_errno) {
+          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+          exit();
+        }
+        //Create call statement and run it
+        $SQLInput = "CALL addTag(\"{$oneTag}\", \"1\")";
+        $queryOutput = $conn->query($SQLInput);
+        $conn -> close();
+        //Connect to server
+        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+        if ($conn -> connect_errno) {
+          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+          exit();
+        }
+        //Create call statement and run it
+        $SQLInput = "CALL getTagID(\"{$oneTag}\", \"1\")";
+        $queryOutput = $conn->query($SQLInput);
+        $conn -> close();
+        $tagID = $queryOutput -> fetch_object() -> Identifier;
+        //Connect to server
+        $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+        if ($conn -> connect_errno) {
+          echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+          exit();
+        }
+        //Create call statement and run it
+        $SQLInput = "CALL linkTSandTag(\"{$TimestampID}\", \"{$tagID}\")";
+        $queryOutput = $conn->query($SQLInput);
+        $conn -> close();
+        $tagID = $queryOutput -> fetch_object() -> Identifier;
       }
-      //Create call statement and run it
-      $SQLInput = "CALL addTag(\"{$oneTag}\", \"1\")";
-      $queryOutput = $conn->query($SQLInput);
-      $conn -> close();
-      //Connect to server
-      $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-      if ($conn -> connect_errno) {
-        echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-        exit();
-      }
-      //Create call statement and run it
-      $SQLInput = "CALL getTagID(\"{$oneTag}\", \"1\")";
-      $queryOutput = $conn->query($SQLInput);
-      $conn -> close();
-      $tagID = $queryOutput -> fetch_object() -> Identifier;
-      //Connect to server
-      $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
-      if ($conn -> connect_errno) {
-        echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
-        exit();
-      }
-      //Create call statement and run it
-      $SQLInput = "CALL linkTSandTag(\"{$TimestampID}\", \"{$tagID}\")";
-      $queryOutput = $conn->query($SQLInput);
-      $conn -> close();
-      $tagID = $queryOutput -> fetch_object() -> Identifier;
     }
     //!Creating Supers
   }
@@ -264,20 +291,23 @@
 
   <!--Control buttons -->
   <button onclick="startStopVideo()" type = "button" class="btn btn-primary" align=center> Play/Pause </button>
-
+<!--
   <button onclick="saveSync()" id="saveSyncBtn" type="button" class="btn btn-primary" name ="saveSyncBtn">Save Current Time Sync</button>
 
   <button onclick="syncVideos()" id="syncBtn" type="button" class="btn btn-primary" name ="syncBtn">Sync Videos</button>
-
+-->
 <!--Control buttons -->
   <!-- html form -->
+  <!--
   <div class="loginSection">
     <div class="container">
       <div class="row">
         <div class="col-md-4 col-xs-1">
+        -->
            <!--Something on left maybe-->
-        </div>
+        <!-- </div> -->
         <!--<div id="loginCol" class="col-md-4 col-xs-10">-->
+        <!--
         <div class="col-md-4 col-xs-10">
           <h1>UoD Add Timestamp</h1> <hr>
           <form action="" method="POST">
@@ -287,13 +317,17 @@
               <br>
             </div>
             <div class="form-group">
+            -->
               <!--Note to self - check out explode -->
+              <!--
               <label for="username">Enter the tags you want on the timestamp (seperated by spaces):</label>
               <input type="text" class="form-control" placeholder="Enter tag text" id="tagsIn" name = "tagsIn">
               <br>
             </div>
             <div class="form-group">
+            -->
               <!--Note to self - check out explode -->
+              <!--
               <label for="username">Enter the super tags you want on the timestamp (seperated by spaces):</label>
               <input type="text" class="form-control" placeholder="Enter super tag text" id="superIn" name = "superIn">
               <br>
@@ -302,11 +336,14 @@
           </form>
         </div>
         <div class="col-md-4 col-xs-1">
+        -->
           <!--Something on right maybe-->
+          <!--
         </div>
       </div>
     </div>
   </div>
+-->
   <!-- html form -->
 
 </div>
