@@ -1,0 +1,10 @@
+To get to database:
+
+-> https://phpmyadmin.cluster027.hosting.ovh.net/index.php 
+
+-> Enter these login details in this order:
+oaicontezoagile.mysql.db
+oaicontezoagile
+M5fgq184HDVu
+
+-> TADA! it works
