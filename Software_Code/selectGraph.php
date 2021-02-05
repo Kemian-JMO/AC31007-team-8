@@ -62,7 +62,7 @@
           <!--Something on left maybe-->
        </div>
        <div id="loginCol" class="col-md-4 col-xs-10">
-         <h1>UoD Download Results</h1> <hr>
+         <h1>UoD Graph Results</h1> <hr>
          <form action="/creatingGraphs.php" method="POST">
            <div class="form-group">
              <label for="username">Select the questionnaire you want to graph the results of:</label>
@@ -91,7 +91,7 @@
                      echo "<input type=\"radio\" id=\"{$row -> Identifier}\" value={$row -> Identifier} name = \"questionnaireNumIn\"> <label for=\"{$row -> Identifier}\">{$row -> Name}</label><br>";
                  }
                }else{
-                 echo '<h1>You currently dont have admin access to any questionnaire</h1>';
+                 echo 'You currently dont have viewing access to any questionnaire';
                }
              ?>
            </div>
