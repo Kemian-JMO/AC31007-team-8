@@ -85,15 +85,17 @@
       echo "<div class=\"container\"><div class=\"row\">";
       createBlock("http://oai-content.co.uk/resultsCSV.php", "Download Results", "Download the results of the wonderful questionnaires you've created!");
       createBlock("http://oai-content.co.uk/selectGraph.php", "Graph Results", "See the results of the multiple choice or likert questions from your questionnaires as graphs");
-      createBlock("#", "Create Questionnaire", "Create a questionnaire and allow other users to answer it!");
+      createBlock("http://oai-content.co.uk/QuestionaireCreator", "Create Questionnaire", "Create a questionnaire and allow other users to answer it!");
       echo "</div><br><hr><br></div>";
       echo "<div class=\"container\"><div class=\"row\">";
-      createBlock("#", "Edit Questionnaire", "Make a mistake in a questionnaire? Click here to edit them!");
+      //createBlock("#", "Edit Questionnaire", "Make a mistake in a questionnaire? Click here to edit them!");
       createBlock("http://oai-content.co.uk/deleteQuestionaire.php", "Delete Questionnaire", "Delete a questionnaire that you no longer need");
+      createBlock("http://oai-content.co.uk/uploadVideo.php", "Upload Video", "Need a video uploaded for your project? Do it here!");
+      createBlock("http://oai-content.co.uk/selectVideos.php", "View Videos", "View and Timestamp your videos here.");
+      echo "</div><br><hr><br></div>";
     }
-    else{
-      echo "<div class=\"container\"><div class=\"row\">";
-    }
+
+    echo "<div class=\"container\"><div class=\"row\">";
     //What everyone can do
     createBlock("http://oai-content.co.uk/selectQuestionnaire.php", "Answer Questionnaire", "Answer any of the questionnaires you have access to.");
     echo "</div><br><hr><br></div>";
