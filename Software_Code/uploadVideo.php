@@ -1,14 +1,29 @@
-<!doctype html>
-<html lang="en">
-
-</html>
 <?php
 //Starts the session that's being used
   session_start();
   if ($_SESSION["loggedIn"] != "true") {
       header('Location: http://oai-content.co.uk');
   }
+  if($_SESSION["role"] == "CR"){
+    //Connect to server
+    $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+    if ($conn -> connect_errno) {
+      echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+      exit();
+    }
+    $SQLInput = "CALL checkIfFootage(\"{$_SESSION['username']}\")";
+    $queryOutput = $conn->query($SQLInput);
+
+    if($queryOutput->fetch_object()->footageValue < 1){
+      header('Location: http://oai-content.co.uk/dashboard.php');
+    }
+  }
 ?>
+
+<html lang="en">
+
+</html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,6 +71,12 @@ if(isset($_POST['upload'])){
    $maxsize = 5242880; // 5MB
    $_SESSION['message'] = "nothing happened ~O~";
    if(isset($_FILES['file']['name']) && $_FILES['file']['name'] != ''){
+     if(isset($_POST['user'])){
+       $Owner = $_POST['user'];
+     }else{
+       $Owner = $_SESSION['username'];
+     }
+
        $name = $_FILES['file']['name'];
        $target_dir = "videos/";
        $target_file = $target_dir . $_FILES["file"]["name"];
@@ -82,7 +103,7 @@ if(isset($_POST['upload'])){
                  exit();
                }
                // Insert record
-               $query = "INSERT INTO videos(name,location, Owner) VALUES('".$name."','".$target_file."','".$_SESSION['username']."')";
+               $query = "INSERT INTO videos(name,location, Owner) VALUES('".$name."','".$target_file."','".$Owner."')";
                $queryOutput = $conn->query($query);
                $conn -> close();
                $_SESSION['message'] = "Upload successfully.";
@@ -114,6 +135,32 @@ if(isset($_SESSION['message'])){
         <input type='file' name='file' />
       </div>
       <br>
+      <?php
+        if($_SESSION["role"] == "CR"){
+          echo "<div class=\"form-group\">";
+            echo "<label for=\"username\">Select the Principle Researcher you want to upload for:</label>";
+            echo "<br>";
+              //Connect to server
+              $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+              if ($conn -> connect_errno) {
+                echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+                exit();
+              }
+              $SQLInput = "CALL getFootagePRs(\"{$_SESSION["username"]}\")";
+              $queryOutput = $conn->query($SQLInput);
+              $conn -> close();
+
+              if($queryOutput->num_rows > 0){
+                while($row = $queryOutput->fetch_object()){
+                  echo "<input type=\"radio\" id=\"{$row -> PRUsername}\" value=\"{$row -> PRUsername}\" name = \"user\"> <label for=\"{$row -> PRUsername}\">{$row -> PRUsername}</label><br>";
+                }
+              }else{
+                echo "<h1>You currently don't have any co-researchers</h1>";
+              }
+          echo "</div>";
+          echo "<br>";
+        }
+      ?>
       <div class="form-group">
         <button id="submitBtn" type="submit" value='Upload' class="btn btn-primary" name ="upload">Upload Video</button>
       </div>
