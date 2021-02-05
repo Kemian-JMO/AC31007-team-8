@@ -92,6 +92,8 @@
           <div class="form-group">
             <label for="username"> Your Current Co-Researchers:</label><br>
             <?php
+              $ownCRs = [];
+              $arrayLength = 0;
               //Connect to server
               $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
               if ($conn -> connect_errno) {
@@ -104,6 +106,8 @@
               if($queryOutput->num_rows > 0){
                 while($row = $queryOutput->fetch_object()){
                     echo "-{$row -> CRUsername}<br>";
+                    array_push($ownCRs, $row->CRUsername);
+                    $arrayLength++;
                 }
               }else{
                 echo "<h1>You currently don't have any co-researchers</h1>";
@@ -125,7 +129,15 @@
 
               if($queryOutput->num_rows > 0){
                 while($row = $queryOutput->fetch_object()){
+                  $running = 0;
+                  for($i=0;$i<$arrayLength;$i++){
+                    if($row->Username == $ownCRs[$i]){
+                      $running = 1;
+                    }
+                  }
+                  if($running == 0){
                     echo "<input type=\"radio\" id=\"{$row -> Username}\" value=\"{$row -> Username}\" name = \"username\"> <label for=\"{$row -> Username}\">{$row -> Username}</label><br>";
+                  }
                 }
               }else{
                 echo '<h1>There are no co-researchers</h1>';
