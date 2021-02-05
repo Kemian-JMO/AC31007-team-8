@@ -65,18 +65,43 @@
             <label for="username">Select questionnaire you want to answer:</label>
             <br>
             <?php
+              $answeredIDs = [];
               //Connect to server
               $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
               if ($conn -> connect_errno) {
                 echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
                 exit();
               }
-              $SQLInput = "CALL getAnswerableQuestionnaires(\"{$_SESSION["username"]}\")";
+              $SQLInput = "CALL getAnsweredQuestionnaires(\"{$_SESSION["username"]}\")";
               $queryOutput = $conn->query($SQLInput);
+              $conn -> close();
+              while($row = $queryOutput->fetch_object()){
+                array_push($answeredIDs, $row->QuestionnaireIdentifier);
+              }
+
+              $arrayLength = count($answeredIDs);
+
+              //Connect to server
+              $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+              if ($conn -> connect_errno) {
+                echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+                exit();
+              }
+              $SQLInput = "SELECT * FROM Questionnaire";
+              $queryOutput = $conn->query($SQLInput);
+              $conn -> close();
 
               if($queryOutput->num_rows > 0){
                 while($row = $queryOutput->fetch_object()){
+                  $running = 0;
+                  for($i=0;$i<$arrayLength;$i++){
+                    if($row->Identifier == $answeredIDs[$i]){
+                      $running = 1;
+                    }
+                  }
+                  if($running == 0){
                     echo "<input type=\"radio\" id=\"{$row -> Name}\" value=\"{$row -> Identifier}\" name = \"name\"> <label for=\"{$row -> Name}\">{$row -> Name}</label><br>";
+                  }
                 }
               }else{
                 echo '<h1>0 results, you dont have any questionnaires to answer</h1>';
