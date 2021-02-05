@@ -110,7 +110,7 @@
               }
             ?>
           </div>
-          <button id="submitBtn"type="submit" class="btn btn-primary" name ="submitBtn">Delete User</button>
+          <button id="submitBtn"type="submit" href="http://oai-content.co.uk/dashboard.php" class="btn1 btn-primary1" name ="submitBtn">Delete User</button>
         </form>
       </div>
       <div class="col-md-4 col-xs-1">
