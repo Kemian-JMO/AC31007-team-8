@@ -8,6 +8,10 @@ abody {
   src: url(Baxter-Bold.ttf);
 }
 
+#testColor {
+  background-color: #f1f6f9 !important;
+}
+
 main{
 position: relative;
 
@@ -153,10 +157,8 @@ p {
 }
 
 .likert li {
-    float: center;
-    list-style-type: none;
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* buttton-promary */
@@ -201,6 +203,10 @@ p {
 
 }
 
+/* remove likert padding */
+#maybe {
+  padding: 0px;
+}
 
 
 .card {
@@ -253,7 +259,7 @@ p {
 }
 
 
-
+s
 .answer-text {
 
     resize: vertical;
@@ -263,7 +269,7 @@ p {
 #bodyQuestion {
   font-family: sans-serif;
 
-  background-color: #dedede;
+  background-color: #ffffff;
 
   color: #333;
 
@@ -277,5 +283,17 @@ p {
   padding-top: 10px;
 }
 
-#testerlol {
+#close {
+  float: right;
+  background-color: #ffffff;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+
+.fixWidth {
+  width: 70%;
+  padding-left: 200px;
 }
