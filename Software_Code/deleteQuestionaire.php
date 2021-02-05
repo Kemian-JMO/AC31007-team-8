@@ -31,7 +31,7 @@
       <div class="navbar-main">
           <div class="container">
               <div class="row">
-                  <div class="navbar-header">//
+                  <div class="navbar-header">
                       <div class="logo-group clearfix">
                           <img src="img_UoDLogo.jpg" alt="logo" style="max-width:70%;">
                           <!-- dundee图片--->
@@ -130,11 +130,10 @@
                     echo "<input type=\"radio\" id=\"{$row -> Identifier}\" value=\"{$row -> Identifier}\" name = \"questionnaire\"> <label for=\"{$row -> Identifier}\">{$row -> Name}</label><br>";
                 }
               }else{
-                echo '<h1>You have not created a questionnaire yet</h1>';
+                echo 'You have no questionnaires to delete';
               }
             ?>
           </div>
-          <button id="edit" type="submit" class="btn btn-primary" name ="edit">Edit Questionnaire</button>
           <button id="submitBtn" type="submit" class="btn1 btn-primary1" name ="submitBtn">Delete Questionnaire</button>
         </form>
       </div>
