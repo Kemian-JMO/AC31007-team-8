@@ -4,7 +4,7 @@
   if($_SESSION["loggedIn"] != "true"){
     header('Location: http://oai-content.co.uk');
   }
-  if($_SESSION["role"] != "Lab Manager" && $_SESSION["role"] != "PR"){
+  if($_SESSION["role"] != "Lab Manager" && $_SESSION["role"] != "PR" && $_SESSION["role"] != "CR"){
     header('Location: http://oai-content.co.uk/dashboard.php');
   }
 ?>
@@ -125,15 +125,24 @@
                  echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
                  exit();
                }
-               $SQLInput = "CALL getOwnQuestionnaires(\"{$_SESSION["username"]}\")";
-               $queryOutput = $conn->query($SQLInput);
+
+               $queryOutput = 0;
+
+               if($_SESSION["role"]=="CR"){
+                 $SQLInput = "CALL getViewableQuestionnaires(\"{$_SESSION["username"]}\")";
+                 $queryOutput = $conn->query($SQLInput);
+               }
+               else{
+                 $SQLInput = "CALL getOwnQuestionnaires(\"{$_SESSION["username"]}\")";
+                 $queryOutput = $conn->query($SQLInput);
+               }
 
                if($queryOutput->num_rows > 0){
                  while($row = $queryOutput->fetch_object()){
                      echo "<input type=\"radio\" id=\"{$row -> Identifier}\" value={$row -> Identifier} name = \"questionnaireNumIn\"> <label for=\"{$row -> Identifier}\">{$row -> Name}</label><br>";
                  }
                }else{
-                 echo '<h1>You currently dont have admin access to any questionnaire</h1>';
+                 echo 'You currently dont have viewing access to any questionnaire';
                }
              ?>
            </div>

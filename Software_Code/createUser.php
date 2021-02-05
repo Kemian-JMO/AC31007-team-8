@@ -122,7 +122,7 @@
                 <option value="Student">Student</option>
               </select>
             </div>
-            <button id="submitBtn"type="submit" class="btn btn-primary" name ="submitBtn">Create User</button>
+            <button id="submitBtn"type="submit" href="http://oai-content.co.uk/dashboard.php" class="btn btn-primary" name ="submitBtn">Create User</button>
           </form>
         </div>
         <div class="col-md-4 col-xs-1">

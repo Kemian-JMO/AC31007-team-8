@@ -1,0 +1,18 @@
+{
+  "logger": {
+    "title": "Remote Sync"
+  },
+  "transport": "ftp",
+  "uploadOnSave": true,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "oaicontezo@ftp.cluster027.hosting.ovh.net/",
+  "target": "/home/oaicontezo\\index\\www/Files/index",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "oaicontezo",
+  "password": "wvwAJ72ZG25r",
+  "watch": []
+}
