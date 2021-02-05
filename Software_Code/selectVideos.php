@@ -7,6 +7,25 @@
   if($_SESSION["role"] != "Lab Manager" && $_SESSION["role"] != "PR" && $_SESSION["role"] != "CR"){
     header('Location: http://oai-content.co.uk/dashboard.php');
   }
+  if($_SESSION["role"] == "CR")
+  {
+    //Connect to server
+    $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
+    if ($conn -> connect_errno) {
+      echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
+      exit();
+    }
+    $SQLInput = "CALL checkIfFootage(\"{$_SESSION['username']}\")";
+    $queryOutput = $conn->query($SQLInput);
+
+    if($queryOutput->fetch_object()->footageValue < 1){
+      header('Location: http://oai-content.co.uk/dashboard.php');
+      exit();
+    }
+    if(!isset($_POST['user'])){
+        header('Location: http://oai-content.co.uk/selectYourPR.php');
+    }
+  }
 ?>
 
  <html lang="en" dir="ltr">
@@ -68,6 +87,12 @@
              <label for="username">Select the videos want to watch:</label>
              <br>
              <?php
+              $Owner = "";
+               if(isset($_POST['user'])){
+                 $Owner = $_POST['user'];
+               }else{
+                 $Owner = $_SESSION['username'];
+               }
                //Connect to server
                $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
                if ($conn -> connect_errno) {
@@ -77,18 +102,12 @@
 
                $queryOutput = 0;
 
-               if($_SESSION["role"]=="CR"){
-                 $SQLInput = "CALL getViewableQuestionnaires(\"{$_SESSION["username"]}\")";
-                 $queryOutput = $conn->query($SQLInput);
-               }
-               else{
-                 $SQLInput = "CALL getMyVideos(\"{$_SESSION["username"]}\")";
-                 $queryOutput = $conn->query($SQLInput);
-               }
+              $SQLInput = "CALL getMyVideos(\"{$Owner}\")";
+              $queryOutput = $conn->query($SQLInput);
 
                if($queryOutput->num_rows > 0){
                  while($row = $queryOutput->fetch_object()){
-                     echo "<input type=\"checkbox\" id=\"{$row -> id}\" value={$row -> id} name = \"{$row -> id}\"> <label for=\"{$row -> id}\">{$row -> name}</label><br>";
+                     echo "<input type=\"checkbox\" id=\"{$row -> id}\" value=\"{$row -> id}\" name = \"{$row -> id}\"> <label for=\"{$row -> id}\">{$row -> name}</label><br>";
                  }
                }else{
                  echo '<h1>You currently dont have access to any videos</h1>';
