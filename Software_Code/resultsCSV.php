@@ -125,7 +125,7 @@
                  echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
                  exit();
                }
-               
+
                $queryOutput = 0;
 
                if($_SESSION["role"]=="CR"){
@@ -142,7 +142,7 @@
                      echo "<input type=\"radio\" id=\"{$row -> Identifier}\" value={$row -> Identifier} name = \"questionnaireNumIn\"> <label for=\"{$row -> Identifier}\">{$row -> Name}</label><br>";
                  }
                }else{
-                 echo '<h1>You currently dont have admin access to any questionnaire</h1>';
+                 echo 'You currently dont have viewing access to any questionnaire';
                }
              ?>
            </div>
