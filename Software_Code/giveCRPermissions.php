@@ -81,11 +81,6 @@
         $deleter = 1;
       }
     }
-    if(isset($_POST['footage'])){
-      if($_POST['footage'] == "true"){
-        $footager = 1;
-      }
-    }
 
     //Delete Previous Permissions
     //Connect to server
@@ -118,7 +113,7 @@
       exit();
     }
 
-    $SQLInput = "CALL newCRPerms(\"{$usernameIn}\", \"{$questionnaireNum}\", \"{$viewer}\", \"{$editor}\", \"{$deleter}\", \"{$footager}\", \"{$CRPRID}\")";
+    $SQLInput = "CALL newCRPerms(\"{$usernameIn}\", \"{$questionnaireNum}\", \"{$viewer}\", \"{$editor}\", \"{$deleter}\",\"{$CRPRID}\")";
     $queryOutput = $conn->query($SQLInput);
     $conn -> close();
     //Add the new Permissions
@@ -129,12 +124,17 @@
         $creator = 1;
       }
     }
+    if(isset($_POST['footage'])){
+      if($_POST['footage'] == "true"){
+        $footager = 1;
+      }
+    }
     $conn = new mysqli("oaicontezoagile.mysql.db","oaicontezoagile","M5fgq184HDVu","oaicontezoagile");
     if ($conn -> connect_errno) {
       echo "<br>Failed to connect to MySQL: " . $conn -> connect_error;
       exit();
     }
-    $SQLInput = "CALL makeCreator(\"{$usernameIn}\", \"{$_SESSION['username']}\", \"{$creator}\")";
+    $SQLInput = "CALL makeCreator(\"{$usernameIn}\", \"{$_SESSION['username']}\", \"{$creator}\",\"{$footager}\")";
     $queryOutput = $conn->query($SQLInput);
     $conn -> close();
     //For creating
@@ -203,13 +203,13 @@
             <label for="edit"> Edit</label><br>
             <input type="checkbox" id="delete" name="delete" value="true">
             <label for="delete"> Delete</label><br>
-            <input type="checkbox" id="footage" name="footage" value="true">
-            <label for="footage"> Review Video Footage</label><br>
           </div>
           <div class="form-group">
-            <label for="create"> Click here to grant them access to creating questionnaires:</label><br>
+            <label for="create"> Select the general permissions you want to grant them:</label><br>
             <input type="checkbox" id="create" name="create" value="true">
             <label for="create"> Create Questionnaires</label><br>
+            <input type="checkbox" id="footage" name="footage" value="true">
+            <label for="footage"> Review and Upload Video Footage</label><br>
           </div>
           <br>
           <button id="submitBtn"type="submit" class="btn btn-primary" name ="submitBtn">Assign Permissions</button>
